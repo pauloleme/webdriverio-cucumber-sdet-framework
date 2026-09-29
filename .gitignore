@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Test reports and generated output
+allure-results/
+allure-report/
+coverage/
+dist/
+logs/
+screenshots/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Debug logs
+npm-debug.log*

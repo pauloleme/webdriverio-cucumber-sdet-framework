@@ -1,0 +1,1 @@
+export const standardUserPassword = 'secret_sauce';

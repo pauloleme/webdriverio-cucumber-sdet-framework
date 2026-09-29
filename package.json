@@ -1,0 +1,26 @@
+{
+  "name": "saucedemo-e2e-tests",
+  "version": "1.0.0",
+  "description": "End-to-end test suite for SauceDemo using WebdriverIO and Cucumber.",
+  "private": true,
+  "scripts": {
+    "test": "wdio run ./wdio.conf.ts",
+    "test:checkout": "wdio run ./wdio.conf.ts --spec ./features/checkout.feature",
+    "test:login": "wdio run ./wdio.conf.ts --spec ./features/login.feature",
+    "wdio": "wdio run ./wdio.conf.ts"
+  },
+  "keywords": ["webdriverio", "cucumber", "e2e", "saucedemo"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "@wdio/allure-reporter": "^9.32.0",
+    "@wdio/cli": "^9.32.0",
+    "@wdio/cucumber-framework": "^9.32.0",
+    "@wdio/globals": "^9.31.3",
+    "@wdio/local-runner": "^9.32.0",
+    "@wdio/spec-reporter": "^9.32.0",
+    "expect-webdriverio": "^6.1.0"
+  }
+}
