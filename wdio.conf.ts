@@ -1,3 +1,6 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
 export const config: WebdriverIO.Config = {
     //
     // ====================
@@ -52,7 +55,12 @@ export const config: WebdriverIO.Config = {
     // https://saucelabs.com/platform/platform-configurator
     //
     capabilities: [{
-        browserName: 'chrome'
+        browserName: 'chrome',
+        'goog:chromeOptions': {
+            args: process.env.CI === 'true' || process.env.HEADLESS === 'true'
+                ? ['--headless=new', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage', '--window-size=1920,1080']
+                : ['--window-size=1920,1080']
+        }
     }],
 
     //
@@ -130,7 +138,7 @@ export const config: WebdriverIO.Config = {
     // If you are using Cucumber you need to specify the location of your step definitions.
     cucumberOpts: {
         // <string[]> (file/dir) require files before executing features
-        require: ['./features/step-definitions/store.steps.ts'],
+        require: ['./features/step-definitions/**/*.ts'],
         // <boolean> show full backtrace for errors
         backtrace: false,
         // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
@@ -148,7 +156,7 @@ export const config: WebdriverIO.Config = {
         // <boolean> fail if there are any undefined or pending steps
         strict: false,
         // <string> (expression) only execute the features or scenarios with tags matching the expression
-        tagExpression: '',
+        tagExpression: process.env.TAGS || '',
         // <number> timeout for step definitions
         timeout: 60000,
         // <boolean> Enable this config to treat undefined definitions as warnings.
@@ -254,8 +262,23 @@ export const config: WebdriverIO.Config = {
      * @param {number}             result.duration  duration of scenario in milliseconds
      * @param {object}             context          Cucumber World object
      */
-    // afterStep: function (step, scenario, result, context) {
-    // },
+    afterStep: async function (step, scenario, result, _context) {
+        if (!result.passed) {
+            const pngBase64 = await browser.takeScreenshot();
+            try {
+                const screenshotsDir = path.resolve(process.cwd(), 'screenshots');
+                if (!fs.existsSync(screenshotsDir)) {
+                    fs.mkdirSync(screenshotsDir, { recursive: true });
+                }
+                const cleanScenario = (scenario?.name || 'scenario').replace(/[^a-zA-Z0-9_-]/g, '_');
+                const cleanStep = (step?.text || 'step').replace(/[^a-zA-Z0-9_-]/g, '_');
+                const filePath = path.join(screenshotsDir, `${cleanScenario}-${cleanStep}-${Date.now()}.png`);
+                fs.writeFileSync(filePath, Buffer.from(pngBase64, 'base64'));
+            } catch (err) {
+                console.error('Failed to save failure screenshot to disk:', err);
+            }
+        }
+    },
     /**
      *
      * Runs after a Cucumber Scenario.
@@ -332,4 +355,4 @@ export const config: WebdriverIO.Config = {
     */
     // afterAssertion: function(params) {
     // }
-}
+};

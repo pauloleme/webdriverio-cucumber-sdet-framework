@@ -1,32 +1,18 @@
 {
+    "extends": "./tsconfig.json",
     "compilerOptions": {
-        "moduleResolution": "node",
-        "module": "commonjs",
-        "target": "es2022",
-        "lib": [
-            "es2022",
-            "dom"
-        ],
+        "moduleResolution": "bundler",
+        "module": "ESNext",
+        "target": "ES2022",
         "types": [
             "node",
             "@wdio/globals/types",
             "expect-webdriverio",
             "@wdio/cucumber-framework"
-        ],
-        "skipLibCheck": true,
-        "noEmit": true,
-        "allowImportingTsExtensions": true,
-        "resolveJsonModule": true,
-        "isolatedModules": true,
-        "strict": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true
+        ]
     },
-    "extends": "./tsconfig.json",
     "include": [
-        "features",
-        "wdio.conf.ts",
-        "features"
+        "features/**/*.ts",
+        "wdio.conf.ts"
     ]
 }

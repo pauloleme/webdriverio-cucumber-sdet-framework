@@ -1,5 +1,17 @@
+@checkout @cart
 Feature: Shopping cart totals and checkout
 
+  @smoke
+  Scenario: Validate quick cart checkout with single product
+    Given I am on the login page
+    When I log in with 'standard_user'
+    When I add the products "backpack" to the cart
+    And I go to the cart
+    Then the cart total should be "$29.99"
+    And I complete the checkout with total "$29.99"
+    Then I should see the order confirmation page
+
+  @regression
   Scenario Outline: Validate cart total with different product combinations
     Given I am on the login page
     When I log in with 'standard_user'
