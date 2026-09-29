@@ -49,17 +49,16 @@ class InventoryPage extends BasePage {
 
     public async waitForLoad(): Promise<void> {
         await this.waitForUrl('inventory.html');
+
         await this.inventoryContainer.waitForDisplayed({
             timeout: 10000,
             timeoutMsg: 'Inventory catalog container did not load within 10s'
         });
-        await browser.waitUntil(
-            async () => (await this.inventoryItems).length > 0,
-            {
-                timeout: 10000,
-                timeoutMsg: 'Inventory items did not appear within 10s'
-            }
-        );
+
+        await $('[data-test="inventory-item"]').waitForExist({
+            timeout: 10000,
+            timeoutMsg: 'Inventory items did not appear within 10s'
+        });
     }
 
     public async getProductCount(): Promise<number> {
