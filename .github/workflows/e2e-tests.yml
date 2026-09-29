@@ -37,6 +37,12 @@ jobs:
       - name: Run TypeScript type checking
         run: npm run typecheck
 
+      - name: Run Tests
+        env:
+          CI: 'true'
+          HEADLESS: 'true'
+        run: npm test
+
       - name: Run E2E Tests (Smoke Suite)
         env:
           CI: 'true'
