@@ -1,4 +1,4 @@
-import { After, Before, Given, Then, When } from '@wdio/cucumber-framework';
+import { After, AfterAll, Before, Given, Then, When } from '@wdio/cucumber-framework';
 import { browser, expect } from '@wdio/globals';
 
 import { checkoutCustomer } from '../data/checkout-customer';
@@ -8,7 +8,13 @@ import cartPage from '../page-objects/cart.page';
 import checkoutPage from '../page-objects/checkout.page';
 import inventoryPage from '../page-objects/inventory.page';
 import loginPage from '../page-objects/login.page';
+import { PassiveObserver } from '../utils/passive-observer';
 import { formatCentsToPrice, calculateTotalInCents } from '../utils/price.utils';
+
+const passiveObserver = new PassiveObserver({
+    enabled: process.env.PASSIVE_OBSERVER_ENABLED === 'true',
+    source: browser as unknown as ConstructorParameters<typeof PassiveObserver>[0]['source']
+});
 
 Before(async () => {
     await browser.deleteCookies();
@@ -19,6 +25,18 @@ Before(async () => {
 After(async () => {
     await browser.deleteCookies();
     await browser.execute(() => window.localStorage.clear());
+});
+
+Before(async (scenario) => {
+    await passiveObserver.startScenario(scenario.pickle.name);
+});
+
+After(async () => {
+    await passiveObserver.finishScenario();
+});
+
+AfterAll(async () => {
+    await passiveObserver.dispose();
 });
 
 // ==========================================

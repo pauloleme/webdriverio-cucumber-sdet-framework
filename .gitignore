@@ -8,6 +8,8 @@ coverage/
 dist/
 logs/
 screenshots/
+artifacts/passive-evidence/
+artifacts/validation-report/
 
 # Local environment and secrets
 .env
