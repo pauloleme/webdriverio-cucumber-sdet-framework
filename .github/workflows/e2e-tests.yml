@@ -38,11 +38,16 @@ jobs:
         run: npm run typecheck
 
       - name: Run Tests
+        id: full_tests
         env:
           CI: "true"
           HEADLESS: "true"
           PASSIVE_OBSERVER_ENABLED: "true"
         run: npm test
+
+      - name: Verify Current-Run Validation Dashboard
+        if: always() && steps.full_tests.outcome != 'skipped'
+        run: npm run test:report:verify
 
       - name: Run E2E Tests (Smoke Suite)
         env:
@@ -69,10 +74,10 @@ jobs:
           retention-days: 14
 
       - name: Upload Standalone Validation Dashboard
-        if: always()
+        if: always() && steps.full_tests.outcome != 'skipped'
         uses: actions/upload-artifact@v4
         with:
           name: validation-dashboard
           path: artifacts/validation-report/latest.html
-          if-no-files-found: warn
+          if-no-files-found: error
           retention-days: 14

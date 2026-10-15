@@ -8,6 +8,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test:observer": "node --test scripts/passive-observer.test.cjs",
+    "test:report:verify": "node ./scripts/verify-validation-report.cjs",
     "test": "node ./scripts/test-with-validation-report.cjs",
     "test:smoke": "wdio run ./wdio.conf.ts --cucumberOpts.tagExpression=@smoke",
     "test:regression": "wdio run ./wdio.conf.ts --cucumberOpts.tagExpression=@regression",
