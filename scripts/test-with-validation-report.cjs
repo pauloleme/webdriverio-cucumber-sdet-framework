@@ -48,9 +48,9 @@ function readEvidence(filePaths) {
                 try {
                     const record = JSON.parse(line);
                     if (record && typeof record.type === 'string') records.push(record);
-                } catch { /* Ignore incomplete JSONL rows. */ }
+                } catch {}
             }
-        } catch { /* Evidence is supplemental and must not affect test status. */ }
+        } catch {}
     }
     return records;
 }
@@ -122,7 +122,7 @@ function renderEvidenceTable(records) {
     if (!records.length) return '<p class="muted">No passive evidence captured in this run.</p>';
     const rows = records.map((record) => {
         let origin = '';
-        try { origin = new URL(record.requestUrl || record.pageUrl).origin; } catch { /* URL is optional. */ }
+        try { origin = new URL(record.requestUrl || record.pageUrl).origin; } catch {}
         return `<tr><td>${escapeHtml(safeText(record.scenarioName))}</td><td>${escapeHtml(record.type)}</td><td>${escapeHtml(record.method || '')}</td><td>${escapeHtml(record.statusCode || '')}</td><td>${escapeHtml(origin)}</td><td>${escapeHtml(record.occurrences || 1)}</td></tr>`;
     }).join('');
     return `<div class="table-wrap"><table><thead><tr><th>Scenario</th><th>Event</th><th>Method</th><th>Status</th><th>Origin</th><th>Count</th></tr></thead><tbody>${rows}</tbody></table></div>`;
