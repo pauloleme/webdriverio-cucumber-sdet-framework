@@ -148,16 +148,16 @@ Redaction is heuristic and cannot identify every application-specific identifier
 
 ## Automation Behavior
 
-| Area | What it does |
-| --- | --- |
-| Scenario execution | `npm test` runs the WebdriverIO v9 and Cucumber feature suite against SauceDemo. Cucumber executes each feature's `Background` steps before its scenarios. |
-| Existing validations | Scenarios verify login behavior, inventory contents and sorting, cart updates and totals, and checkout confirmation using the existing Page Objects and assertions. |
-| Browser lifecycle | Before each scenario, the hooks clear cookies, open the configured base URL, and clear local storage. After each scenario, they clear cookies and local storage again. |
-| Headless execution | Set `HEADLESS=true` to run Chrome without a visible window. The current CI configuration also enables headless mode. |
-| Passive observation | Set `PASSIVE_OBSERVER_ENABLED=true` to observe WebDriver BiDi console errors, JavaScript exceptions, failed requests, and HTTP responses with status 400 or higher. Observation is disabled by default. |
-| Evidence | Bounded, deduplicated JSONL records are written per run and scenario to `artifacts/passive-evidence/`. Sensitive URL parts are removed; raw console text, headers, bodies, DOM content, and screenshots are not stored by the observer. |
+| Area                 | What it does                                                                                                                                                                                                                                                               |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Scenario execution   | `npm test` runs the WebdriverIO v9 and Cucumber feature suite against SauceDemo. Cucumber executes each feature's `Background` steps before its scenarios.                                                                                                                 |
+| Existing validations | Scenarios verify login behavior, inventory contents and sorting, cart updates and totals, and checkout confirmation using the existing Page Objects and assertions.                                                                                                        |
+| Browser lifecycle    | Before each scenario, the hooks clear cookies, open the configured base URL, and clear local storage. After each scenario, they clear cookies and local storage again.                                                                                                     |
+| Headless execution   | Set `HEADLESS=true` to run Chrome without a visible window. The current CI configuration also enables headless mode.                                                                                                                                                       |
+| Passive observation  | Set `PASSIVE_OBSERVER_ENABLED=true` to observe WebDriver BiDi console errors, JavaScript exceptions, failed requests, and HTTP responses with status 400 or higher. Observation is disabled by default.                                                                    |
+| Evidence             | Bounded, deduplicated JSONL records are written per run and scenario to `artifacts/passive-evidence/`. Sensitive URL parts are removed; raw console text, headers, bodies, DOM content, and screenshots are not stored by the observer.                                    |
 | Validation dashboard | `npm test` generates `artifacts/validation-report/latest.html` from result files created by that invocation. It shows run status, scenario and step statuses, durations, passive event counts, and charts. Locally it opens automatically; CI prints the path and summary. |
-| Failure screenshots | A screenshot is saved after a failed step to `screenshots/`. CI uploads that directory with the test artifacts. |
+| Failure screenshots  | A screenshot is saved after a failed step to `screenshots/`. CI uploads that directory with the test artifacts.                                                                                                                                                            |
 
 This project performs deterministic browser automation plus optional passive evidence collection. It does not currently use an LLM, decide whether an observed event is a defect, or execute autonomous browser actions. Passive events are diagnostic evidence and do not change the conventional test verdict.
 
